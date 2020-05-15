@@ -22,8 +22,13 @@ register_uninstall_hook(__FILE__, 'YDFD_uninstall' );
 function YDFD_uninstall(){
     $admin_actions = new YDFD_Actions();
 	delete_option("option_name");
+	$files = scandir($admin_actions->dirpath);
+	foreach ($files as $file){
+		if (is_file($admin_actions->dirpath . '/' . $file)) {
+			unlink( $admin_actions->dirpath . '/' . $file );
+		}
+	}
 	if (file_exists($admin_actions->dirpath) ) {
-		//unlink($dirpath . '/vadan-price.xlsx');
 		rmdir($admin_actions->dirpath);
 	}
 }
