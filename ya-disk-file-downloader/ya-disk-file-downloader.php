@@ -12,12 +12,12 @@ defined( 'ABSPATH' ) || exit;
 define('YDFD_PATH', plugin_dir_path( __FILE__ ));
 define('YDFD_FILE', (__FILE__));
 
-require YDFD_PATH . 'classes/class-ydfd.php';
+require ('classes/class-ydfd.php');
 
-function run_ydfd() {
-	$plugin = new YDFD();
-}
-run_ydfd();
+/**
+ * Create instance of plugin
+ */
+new YDFD();
 
 register_uninstall_hook(__FILE__, 'YDFD_uninstall' );
 function YDFD_uninstall(){

@@ -16,7 +16,7 @@ class YDFD_Actions {
 	}
 
 	public function YDFD_get_file($count = 0){
-		global $output_array, $dirpath;
+		global $output_array;
 		$option = get_option('option_name'); // Получает массив настроек
 		$public_url = $option['input'];      // Получает публичный адрес с Я.Диска с файлом из массива настроек
 		$report_email = $option['email'];    // Email для отправки отчёта о статусе выполнения
@@ -45,8 +45,7 @@ class YDFD_Actions {
 							# Записываем файл в папку wp-content/uploads/ya-disc-files/
 							$is_file_write = file_put_contents(WP_CONTENT_DIR . "/uploads/ya-disc-files/" . iconv("utf-8", "cp1251", $filename), $file);
 						} else { // Папки для записи файла не существует на сервере
-							$output = "<div class='update-nag'><p>Папки <strong>wp-content/uploads/ya-disc-files/</strong> не существует!</p></div>";
-							return $output;
+							return "<div class='update-nag'><p>Папки <strong>wp-content/uploads/ya-disc-files/</strong> не существует!</p></div>";
 						}
 						if ($is_file_write) { // Файл успешно получен и записан в папку на сервере
 							$output = '<div class="updated"><p>Файл получен</p></div>
@@ -154,8 +153,12 @@ class YDFD_Actions {
 	}
 
 	/**
-    * Функция транслитерации.
-	*/
+	 * Функция транслитерации.
+	 *
+	 * @param $string
+	 *
+	 * @return string
+	 */
 	public function rus2translit($string) {
 		$converter = array(
 			'а' => 'a',   'б' => 'b',   'в' => 'v',

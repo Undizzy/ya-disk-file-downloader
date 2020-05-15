@@ -25,7 +25,7 @@ class YDFD_Output {
 			</h2>
 			<?php settings_errors(); ?>
 			<?php if( $active_tab == 'display_options' ) { ?>
-				<form action="options.php" method="POST">
+				<form action="<?php echo get_admin_url(); ?>options.php" method="POST">
 					<?php
 					settings_fields( 'option_group' );     // скрытые защитные поля
 					do_settings_sections( 'YDFD_page' ); // секции с настройками (опциями). У нас она всего одна 'section_id'
