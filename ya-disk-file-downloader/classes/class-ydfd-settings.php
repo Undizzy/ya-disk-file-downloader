@@ -1,11 +1,15 @@
 <?php
+/**
+ * Class YDFD_Settings file.
+ */
 
+defined( 'ABSPATH' ) || exit;
 
+/**
+ * Yandex Disc File Downloader Settings
+ */
 class YDFD_Settings {
-	public function __construct() {
-	}
-
-	/**
+    /**
 	 * Page Title for plugin
 	 */
 	private $plugin_page_title = 'Yandex Disc file downloader:';
@@ -25,8 +29,11 @@ class YDFD_Settings {
 	 */
 	private $plugin_icon_url = 'dashicons-editor-bold';
 
+	public function __construct() {
+
+	}
 	/**
-	 * Добавляем страницы опций и получения файла админ.меню
+	 * Добавляет страницы опций и получения файла админ.меню
 	 */
 	public function YAFD_admin_menu() {
 		$admin_output = new YDFD_Output();
