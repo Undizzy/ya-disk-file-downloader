@@ -54,12 +54,12 @@ class YDFD_Settings {
 		add_settings_section( 'section_id', 'Основные настройки', '', 'YDFD_page' );
 
 		// параметры: $id, $title, $callback, $page, $section, $args
-		add_settings_field('primer_field1', 'Ссылка на Я.Диск', array($this, 'fill_primer_field1'), 'YDFD_page', 'section_id' );
+		add_settings_field('YDFD_disc_url', 'Ссылка на Я.Диск', array($this, 'YDFD_disc_url'), 'YDFD_page', 'section_id' );
 		add_settings_field('YDFD_send_email', 'Email для отправки отчётов', array($this, 'YDFD_send_email_callback'), 'YDFD_page', 'section_id' );
 	}
 
 	## Заполняем опцию 1
-	public function fill_primer_field1(){
+	public function YDFD_disc_url(){
 		$val = get_option('option_name');
 		$val = $val ? $val['input'] : null;
 		?>
