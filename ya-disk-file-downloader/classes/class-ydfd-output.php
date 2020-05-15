@@ -56,7 +56,6 @@ class YDFD_Output {
 					$admin_actions->delete_file($file);
 				}
 				$admin_actions->list_dir();
-
 			}
 			?>
 		</div>

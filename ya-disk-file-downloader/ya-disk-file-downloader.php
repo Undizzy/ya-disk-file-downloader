@@ -10,6 +10,7 @@ Short Name: YDFD_
 defined( 'ABSPATH' ) || exit;
 
 define('YDFD_PATH', plugin_dir_path( __FILE__ ));
+define('YDFD_FILE', (__FILE__));
 
 require YDFD_PATH . 'classes/class-ydfd.php';
 
