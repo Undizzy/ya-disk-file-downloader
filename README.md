@@ -1,8 +1,8 @@
 # Yandex Disk File Downloader WordPress Plugin
 ### English
-WordPress plugin for download shered files in Yandex Disc
+WordPress plugin for download shered files in Yandex Disk
 Features:
-* Files are downloaded to a folder on your server (wp-content / uploads / ya-disc-files). A folder is created when the plugin is activated.
+* Files are downloaded to a folder on your server (wp-content / uploads / ya-disk-files). A folder is created when the plugin is activated.
 * It is possible to add a task to WP-Crone for regular file download.
 * / * It is possible to download from a public link once. PLANNED * /
 * Displays a list of all downloaded files in a folder.
