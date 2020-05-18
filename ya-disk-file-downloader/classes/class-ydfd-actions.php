@@ -42,19 +42,19 @@ class YDFD_Actions {
 
 					if ($file) { // Файл удалось получить
 						if (file_exists($this->dirpath)) { // Папка для сохранения файла установлена (существует) в инсталяции WordPress
-							# Записываем файл в папку wp-content/uploads/ya-disc-files/
-							$is_file_write = file_put_contents(WP_CONTENT_DIR . "/uploads/ya-disc-files/" . iconv("utf-8", "cp1251", $filename), $file);
+							# Записываем файл в папку wp-content/uploads/ya-disk-files/
+							$is_file_write = file_put_contents($this->dirpath ."/" . iconv("utf-8", "cp1251", $filename), $file);
 						} else { // Папки для записи файла не существует на сервере
-							return "<div class='update-nag'><p>Папки <strong>wp-content/uploads/ya-disc-files/</strong> не существует!</p></div>";
+							return "<div class='update-nag'><p>Папки <strong>wp-content/uploads/ya-disk-files/</strong> не существует!</p></div>";
 						}
 						if ($is_file_write) { // Файл успешно получен и записан в папку на сервере
 							$output = '<div class="updated"><p>Файл получен</p></div>
                                     <a class="button button-secondary" 
-                                    href=' . WP_CONTENT_URL . '/uploads/ya-disc-files/'. $filename .'>Скачать полученный файл</a>';
+                                    href=' . $this->dirpath .'/'. $filename .'>Скачать полученный файл</a>';
 							wp_mail($report_email, "YDFD", "Файл получен");
 							return $output;
 						} else { // Неудачная попытка записи файла в папку на сервере (проверить права доступа к папке на запись)
-							$output = "<div class='update-nag'><p>Не удалось записать файл в папку Uploads/ya-disc-files/</p></div>";
+							$output = "<div class='update-nag'><p>Не удалось записать файл в папку Uploads/ya-disk-files/</p></div>";
 							return $output;
 						}
 					} else { // Файл не удалось получить по переданной API Я.Диска ссылке, но ссылка получена!
