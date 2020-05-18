@@ -14,8 +14,6 @@ class YDFD_Output {
 			<?php
 
 			$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'display_options';
-			$action = isset( $_GET[ 'action' ] ) ? $_GET[ 'action' ] : '';
-			$file = isset( $_GET[ 'file' ] ) ? $_GET[ 'file' ] : '';
 
 			?>
 
@@ -33,28 +31,45 @@ class YDFD_Output {
 					?>
 				</form>
 
-			<?php } elseif ($active_tab == 'actions') { ?>
-				<div style="padding: 25px 0">
-					<a class="button button-primary" href="?page=YDFD&tab=actions&action=get-file">Получить файл</a>
-				</div>
-				<?php
-				if (isset($action) and $action == 'get-file'){
-					echo $admin_actions->YDFD_get_file();
+			<?php } elseif ($active_tab == 'actions') {
+				if (isset($_SESSION['YDFD'])){
+					echo $_SESSION['YDFD'];
 				}
-				if (wp_next_scheduled('YDFD_daily_event')){ ?>
-					<a class="button button-primary" href="?page=YDFD&tab=actions&action=delete-event">Удалить CRON задачу</a>
-				<?php } else { ?>
-					<a class="button button-primary" href="?page=YDFD&tab=actions&action=set-event">Создать задачу в CRON</a>
-				<?php }
-				if (isset($action) and $action == 'delete-event'){
-					$admin_actions->YDFD_dell_cron();
-					echo '<div class="updated"><p>Задача удалена</p></div>';
-				} elseif (isset($action) and $action == 'set-event'){
-					$admin_actions->YDFD_add_to_cron();
-					echo '<div class="updated"><p>Задача создана</p></div>';
-				} elseif (isset($action) and $action == 'unset' and isset($file) ){
-					$admin_actions->delete_file($file);
-				}
+				unset($_SESSION['YDFD']);
+			    ?>
+
+                <section style="padding: 10px 0">
+                    <h3>Получение файла</h3>
+                    <form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post">
+                        <input id="public-url" type="text" size="50" name="file">
+                        <input type="hidden" name="action" value="get_file" />
+                        <input class="button button-primary" type="submit" value="Получить файл">
+                        <p><label for="public-url"><span class="dashicons dashicons-warning"></span>Оставьте это поле пустым, что бы получить файл по ссылки из настроек.</label></p>
+                    </form>
+                </section>
+				<section  style="padding: 10px 0">
+                    <h3>Задача в WP-CRON</h3>
+                    <?php if ( wp_next_scheduled( 'YDFD_daily_event' ) ) { ?>
+                        <p><?php echo 'Получение файла запланировано ' . date('d.m.Y H:i', wp_next_scheduled( 'YDFD_daily_event' )); ?></p>
+                    <form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post">
+                        <input type="hidden" name="action" value="delete_cron_event" />
+                        <input class="button button-primary" type="submit" value="Удалить CRON задачу">
+                    </form>
+                <?php } else { ?>
+                        <h4>Задать время выполнения задачи:</h4>
+                        <p><code><i>Задача будет выполнятся ежедневно в установленное ниже время начиная с установленной даты</i></code></p>
+                    <form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post">
+                        <label for="cron-date">Дата</label>
+                        <input id="cron-date" type="date" name="cron-date">
+                        <label for="cron-time">Время</label>
+                        <input id="cron-time" type="time" name="cron-time">
+                        <input type="hidden" name="action" value="add_cron_event" />
+                        <input class="button button-primary" type="submit" value="Создать CRON задачу">
+                    </form>
+                <?php } ?>
+                </section>
+
+                <?php
 				$admin_actions->list_dir();
 			}
 			?>

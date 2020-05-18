@@ -19,10 +19,18 @@ class YDFD {
 		add_action('admin_menu', array($admin_settings, 'YAFD_admin_menu') );
 		add_action('admin_init', array($admin_settings, 'YDFD_register_settings') );
 
+		add_action('admin_post_get_file', array($admin_actions, 'YDFD_get_file'));
+		add_action('admin_post_delete_file', array($admin_actions, 'delete_file'));
+		add_action('admin_post_delete_cron_event', array($admin_actions, 'YDFD_dell_cron'));
+		add_action('admin_post_add_cron_event', array($admin_actions, 'YDFD_add_to_cron'));
+
 		register_activation_hook(YDFD_FILE, array($admin_actions, 'YDFD_add_file_folder') );
-		register_activation_hook(YDFD_FILE, array($admin_actions, 'YDFD_add_to_cron') );
 		add_action('YDFD_daily_event', array($admin_actions, 'do_YDFD_daily_cron') );
 		register_deactivation_hook( YDFD_PATH, array($admin_actions, 'YDFD_dell_cron') );
-
+		add_action('init', function () {
+			if (session_id() == '') {
+				session_start();
+			}
+		});
 	}
 }

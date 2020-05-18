@@ -12,13 +12,20 @@ class YDFD_Actions {
 	 */
 	public $dir_url = WP_CONTENT_URL . '/uploads/ya-disk-files';
 
+	public $output_array = array();
+
 	public function __construct() {
+	    //$this->output_array;
 	}
 
 	public function YDFD_get_file($count = 0){
-		global $output_array;
 		$option = get_option('option_name'); // Получает массив настроек
-		$public_url = $option['input'];      // Получает публичный адрес с Я.Диска с файлом из массива настроек
+        if (isset($_POST['file']) and $_POST['file'] !== ''){
+            $public_url = $_POST['file'];
+        } else {
+	        $public_url = $option['input'];      // Получает публичный адрес с Я.Диска с файлом из массива настроек
+        }
+
 		$report_email = $option['email'];    // Email для отправки отчёта о статусе выполнения
 
 		if ($public_url){ //Публичный URL задан в настройках плагина
@@ -45,37 +52,41 @@ class YDFD_Actions {
 							# Записываем файл в папку wp-content/uploads/ya-disk-files/
 							$is_file_write = file_put_contents($this->dirpath ."/" . iconv("utf-8", "cp1251", $filename), $file);
 						} else { // Папки для записи файла не существует на сервере
-							return "<div class='update-nag'><p>Папки <strong>wp-content/uploads/ya-disk-files/</strong> не существует!</p></div>";
+							$message = 'Папки <strong>wp-content/uploads/ya-disk-files/</strong> не существует!';
+							$_SESSION['YDFD'] = "<div class='notice notice-error is-dismissible'><p>{$message}</p></div>";
+							wp_mail($report_email, "YDFD", "$message");
+							$this->redirect();
 						}
 						if ($is_file_write) { // Файл успешно получен и записан в папку на сервере
-							$output = '<div class="updated"><p>Файл получен</p></div>
-                                    <a class="button button-secondary" 
-                                    href=' . $this->dirpath .'/'. $filename .'>Скачать полученный файл</a>';
-							wp_mail($report_email, "YDFD", "Файл получен");
-							return $output;
+							$message = 'Файл получен ' . "<a href=$this->dir_url/$filename download>Скачать файл</a>";
+							$_SESSION['YDFD'] = "<div class='notice notice-success  is-dismissible'><p>{$message}</p></div>";
+							wp_mail($report_email, "YDFD", "$message");
+							$this->redirect();
 						} else { // Неудачная попытка записи файла в папку на сервере (проверить права доступа к папке на запись)
-							$output = "<div class='update-nag'><p>Не удалось записать файл в папку Uploads/ya-disk-files/</p></div>";
-							return $output;
+							$message = 'Не удалось записать файл в папку Uploads/ya-disk-files/';
+							$_SESSION['YDFD'] = "<div class='notice notice-error is-dismissible'><p>{$message}</p></div>";
+							wp_mail($report_email, "YDFD", "$message");
+							$this->redirect();
 						}
 					} else { // Файл не удалось получить по переданной API Я.Диска ссылке, но ссылка получена!
-						$output = "<div class='update-nag'><p>Не удалось скачать файл с Я.Диска</p></div>";
-						wp_mail($report_email, "YDFD", "Не удалось скачать файл с Я.Диска");
-						return $output;
+						$message = 'Не удалось скачать файл с Я.Диска';
+						$_SESSION['YDFD'] = "<div class='notice notice-error is-dismissible'><p>{$message}</p></div>";
+						wp_mail($report_email, "YDFD", "$message");
+						$this->redirect();
 					}
 				} else { // Неуспешное получение ссылки для скачивания. От API Я.Диска вернулся ответ с сообщением об ошибке.
 					if ($count >= 3){ // Устанавливаем кол-во повторных попыток скачать файл.
-						$output_array[] = $json_result['message']; // Сообщение от API при последней попытке
-						$output_array[] = $req_url; // URL запроса при последней попытке
-						echo "<div class='update-nag'><p>Ссылка на скачивание файла не получена. API не вернул ссылку</p></div>";
-						echo "<pre>"; print_r($output_array); echo "</pre>";
+						array_push($this->output_array, $json_result['message']); // Сообщение от API при последней попытке
+						array_push($this->output_array, $req_url); // URL запроса при последней попытке
+						$message = 'Ссылка на скачивание файла не получена. API не вернул ссылку. <pre>' . print_r($this->output_array, true) . '</pre>';
+						$_SESSION['YDFD'] = "<div class='notice notice-error is-dismissible'><p>{$message}</p></div>";
 						wp_mail($report_email, "YDFD", $json_result['message']);
-						#return $output;
+						$this->redirect();
 					} else { // Если API не вернул ссылку на скачивание по запросу, повторяем запрос
 						$count++;
-						$output_array[] = $json_result['message'];
-						$output_array[] = $req_url;
-						$output = $this->YDFD_get_file($count);
-						return $output;
+						array_push($this->output_array, $json_result['message']);
+						array_push($this->output_array, $req_url);
+						$this->YDFD_get_file($count);
 					}
 				}
 			}
@@ -84,12 +95,22 @@ class YDFD_Actions {
 	}
 
 	public function YDFD_add_to_cron() {
+	    if (isset($_POST['cron-date']) and isset($_POST['cron-time'])){
+	        $date = $_POST['cron-date'];
+	        $time = $_POST['cron-time'];
+        } else {
+	        $date = date('Y-m-d H:i');
+	        $time = '06:00';
+        }
 		// удалим на всякий случай все такие же задачи cron, чтобы добавить новые с "чистого листа"
 		// это может понадобиться, если до этого подключалась такая же задача неправильно (без проверки что она уже есть)
 		wp_clear_scheduled_hook( 'YDFD_daily_event' );
 
 		// добавим новую cron задачу которая будет стартовать в 6 утра и повторяться через 24 часа
-		wp_schedule_event( strtotime('06:00:00'), 'daily', 'YDFD_daily_event');
+		wp_schedule_event( strtotime("$date $time"), 'daily', 'YDFD_daily_event');
+		$message = "Cron job successfully added in WP-Cron!";
+		$_SESSION['YDFD'] = "<div class='notice notice-success is-dismissible'><p>{$message}</p></div>";
+		$this->redirect();
 	}
 
 	public function do_YDFD_daily_cron() {
@@ -99,6 +120,9 @@ class YDFD_Actions {
 
 	public function YDFD_dell_cron() {
 		wp_clear_scheduled_hook('YDFD_daily_event');
+		$message = "Cron job successfully deleted!";
+		$_SESSION['YDFD'] = "<div class='notice notice-success is-dismissible'><p>{$message}</p></div>";
+		$this->redirect();
 	}
 
 	public function YDFD_add_file_folder(){
@@ -108,29 +132,40 @@ class YDFD_Actions {
 	}
 
 	public function list_dir(){
-		$files = scandir($this->dirpath);
-		echo '<h3>Files in your Server</h3>';
-		echo '<table class="wp-list-table widefat fixed striped posts">';
-		echo '<thead><tr><td>File Name</td><td>Actions</td></tr></thead>';
-		foreach ($files as $file){
+		$files = scandir($this->dirpath); ?>
+		<h3>Files in your Server</h3>
+		<table class="wp-list-table widefat fixed striped posts">
+		<thead><tr><td>File Name</td><td>Actions</td></tr></thead>
+		<?php
+        foreach ($files as $file){
 			if ($file === '.' || $file === '..'){
 				continue;
-			} else {
-				echo '<tr>'; ?>
+			} else { ?>
+            <tr>
 				<td>
-					<a href="<?php echo $this->dir_url . '/' . urlencode( $file ) ?>" title="click to download"><?php echo $file ?></a>
+					<a href="<?php echo $this->dir_url . '/' . urlencode( $file ) ?>" title="click to download" download><?php echo $file ?></a>
 				</td>
 				<td>
-					<a href="?page=YDFD&tab=actions&action=unset&file=<?php echo $file ?>">Delete</a>
-				</td> <?php
-				echo '</tr>';
-			}
-		}
-		echo '</table>';
-		echo '<a class="button button-primary" href="?page=YDFD&tab=actions&action=unset&file=all">Очистить рабочую паку</a>';
+                    <form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post">
+                        <input type="hidden" name="filename" value="<?php echo $file ?>" >
+                        <input type="hidden" name="action" value="delete_file" >
+                        <input type="submit" class="link delete" value="Delete">
+                    </form>
+				</td>
+            </tr>
+            <?php }
+		} ?>
+		</table>
+		<form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post">
+            <input type="hidden" name="filename" value="all" >
+            <input type="hidden" name="action" value="delete_file" >
+            <input type="submit" class="button button-primary" value="Очистить рабочую паку">
+        </form>
+		<?php
 	}
 
-	public function delete_file($filename){
+	public function delete_file(){
+	    $filename = $_POST['filename'];
 		if ($filename === 'all'){
 			$files = scandir($this->dirpath);
 			foreach ($files as $file){
@@ -139,13 +174,15 @@ class YDFD_Actions {
 				}
 			}
 			$message = "Work folder is clear!";
-			echo '<div class="notice notice-success is-dismissible"> <p>' . $message . '</p></div>';
+			$_SESSION['YDFD'] = "<div class='notice notice-success is-dismissible'><p>{$message}</p></div>";
+			$this->redirect();
 		} else {
 			$file_path = $this->dirpath . '/' . $filename;
 			if ( file_exists( $file_path ) ) {
 				unlink( $file_path );
-				$message = "File <strong>" . $filename . "</strong> is delete!";
-				echo '<div class="notice notice-success is-dismissible"> <p>' . $message . '</p></div>';
+				$message = "File <strong>{$filename}</strong> is delete!";
+				$_SESSION['YDFD'] = "<div class='notice notice-success is-dismissible'><p>{$message}</p></div>";
+				$this->redirect();
 			} else {
 				return null;
 			}
@@ -159,7 +196,7 @@ class YDFD_Actions {
 	 *
 	 * @return string
 	 */
-	public function rus2translit($string) {
+	private function rus2translit($string) {
 		$converter = array(
 			'а' => 'a',   'б' => 'b',   'в' => 'v',
 			'г' => 'g',   'д' => 'd',   'е' => 'e',
@@ -187,6 +224,10 @@ class YDFD_Actions {
 			' ' => '_',
 		);
 		return strtr($string, $converter);
+	}
+
+	private function redirect(){
+		header('Location: ' . $addr = $_SERVER['HTTP_REFERER']);
 	}
 
 }
