@@ -12,7 +12,7 @@ class YDFD_Settings {
     /**
 	 * Page Title for plugin
 	 */
-	private $plugin_page_title = 'Yandex Disc file downloader:';
+	private $plugin_page_title = 'Yandex Disc File Downloader:';
 
 	/**
 	 * Menu Title for plugin
@@ -27,7 +27,7 @@ class YDFD_Settings {
 	/**
 	 * Icon for plugin menu
 	 */
-	private $plugin_icon_url = 'dashicons-editor-bold';
+	private $plugin_icon_url = 'dashicons-download';
 
 	public function __construct() {
 
