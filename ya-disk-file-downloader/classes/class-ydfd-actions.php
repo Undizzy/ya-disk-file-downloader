@@ -5,12 +5,12 @@ class YDFD_Actions {
 	/**
 	 * Path to working directory in wp-content/uploads
 	 */
-	public $dirpath =  WP_CONTENT_DIR . '/uploads/ya-disc-files';
+	public $dirpath =  WP_CONTENT_DIR . '/uploads/ya-disk-files';
 
 	/**
 	 * URL to working directory in wp-content/uploads
 	 */
-	public $dir_url = WP_CONTENT_URL . '/uploads/ya-disc-files';
+	public $dir_url = WP_CONTENT_URL . '/uploads/ya-disk-files';
 
 	public function __construct() {
 	}

@@ -1,6 +1,6 @@
 <?php
 /**
-Plugin Name: Yandex Disc file downloader
+Plugin Name: Yandex Disk file downloader
 Description: Скачивает расшаренный файл с ценами и остатками с Яндекс.Диска по публичной ссылке и добавляет в CRON на 6:00 утра.
 Version: 1.01
 Author: Undizzy
