@@ -1,11 +1,12 @@
 <?php
 /**
 Plugin Name: Yandex Disk file downloader
-Description: Скачивает расшаренный файл с ценами и остатками с Яндекс.Диска по публичной ссылке и добавляет в CRON на 6:00 утра.
+Description: Скачивает файлы с Яндекс.Диска по публичной ссылке.
 Version: 1.01
 Author: Undizzy
 Author URI: https://twitter.com/NVitkovsky
 Short Name: YDFD_
+Text Domain: ydfd
 */
 defined( 'ABSPATH' ) || exit;
 
