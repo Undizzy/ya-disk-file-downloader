@@ -15,7 +15,6 @@ class YDFD_Actions {
 	public $output_array = array();
 
 	public function __construct() {
-	    //$this->output_array;
 	}
 
 	public function YDFD_get_file($count = 0){
@@ -52,24 +51,24 @@ class YDFD_Actions {
 							# Записываем файл в папку wp-content/uploads/ya-disk-files/
 							$is_file_write = file_put_contents($this->dirpath ."/" . iconv("utf-8", "cp1251", $filename), $file);
 						} else { // Папки для записи файла не существует на сервере
-							$message = 'Папки <strong>wp-content/uploads/ya-disk-files/</strong> не существует!';
+							$message = __('Folder <strong>wp-content/uploads/ya-disk-files/</strong> does not exist', 'ydfd');
 							$_SESSION['YDFD'] = "<div class='notice notice-error is-dismissible'><p>{$message}</p></div>";
 							wp_mail($report_email, "YDFD", "$message");
 							$this->redirect();
 						}
 						if ($is_file_write) { // Файл успешно получен и записан в папку на сервере
-							$message = 'Файл получен ' . "<a href=$this->dir_url/$filename download>Скачать файл</a>";
+							$message = __('File successfully received ', 'ydfd') . "<a href=$this->dir_url/$filename download>" . __('Download File', 'ydfd') . "</a>";
 							$_SESSION['YDFD'] = "<div class='notice notice-success  is-dismissible'><p>{$message}</p></div>";
 							wp_mail($report_email, "YDFD", "$message");
 							$this->redirect();
 						} else { // Неудачная попытка записи файла в папку на сервере (проверить права доступа к папке на запись)
-							$message = 'Не удалось записать файл в папку Uploads/ya-disk-files/';
+							$message = __('Failed to write file to folder Uploads/ya-disk-files/', 'ydfd');
 							$_SESSION['YDFD'] = "<div class='notice notice-error is-dismissible'><p>{$message}</p></div>";
 							wp_mail($report_email, "YDFD", "$message");
 							$this->redirect();
 						}
 					} else { // Файл не удалось получить по переданной API Я.Диска ссылке, но ссылка получена!
-						$message = 'Не удалось скачать файл с Я.Диска';
+						$message = __('Failed to download file from Yandex Disk', 'ydfd');
 						$_SESSION['YDFD'] = "<div class='notice notice-error is-dismissible'><p>{$message}</p></div>";
 						wp_mail($report_email, "YDFD", "$message");
 						$this->redirect();
@@ -78,7 +77,7 @@ class YDFD_Actions {
 					if ($count >= 3){ // Устанавливаем кол-во повторных попыток скачать файл.
 						array_push($this->output_array, $json_result['message']); // Сообщение от API при последней попытке
 						array_push($this->output_array, $req_url); // URL запроса при последней попытке
-						$message = 'Ссылка на скачивание файла не получена. API не вернул ссылку. <pre>' . print_r($this->output_array, true) . '</pre>';
+						$message = __('Link to download file not received. The API did not return the link.', 'ydfd') . '<pre>' . print_r($this->output_array, true) . '</pre>';
 						$_SESSION['YDFD'] = "<div class='notice notice-error is-dismissible'><p>{$message}</p></div>";
 						wp_mail($report_email, "YDFD", $json_result['message']);
 						$this->redirect();
@@ -108,7 +107,7 @@ class YDFD_Actions {
 
 		// добавим новую cron задачу которая будет стартовать в 6 утра и повторяться через 24 часа
 		wp_schedule_event( strtotime("$date $time"), 'daily', 'YDFD_daily_event');
-		$message = "Cron job successfully added in WP-Cron!";
+		$message = __('Cron job successfully added in WP-Cron!', 'ydfd');
 		$_SESSION['YDFD'] = "<div class='notice notice-success is-dismissible'><p>{$message}</p></div>";
 		$this->redirect();
 	}
@@ -120,7 +119,7 @@ class YDFD_Actions {
 
 	public function YDFD_dell_cron() {
 		wp_clear_scheduled_hook('YDFD_daily_event');
-		$message = "Cron job successfully deleted!";
+		$message = __('Cron job successfully deleted!', 'ydfd');
 		$_SESSION['YDFD'] = "<div class='notice notice-success is-dismissible'><p>{$message}</p></div>";
 		$this->redirect();
 	}
@@ -133,9 +132,9 @@ class YDFD_Actions {
 
 	public function list_dir(){
 		$files = scandir($this->dirpath); ?>
-		<h3>Files in your Server</h3>
+		<h3><?php _e('Files in your Server', 'ydfd') ?></h3>
 		<table class="wp-list-table widefat fixed striped posts">
-		<thead><tr><td>File Name</td><td>Actions</td></tr></thead>
+		<thead><tr><td><?php _e('File Name','ydfd') ?></td><td><?php _e('Actions', 'ydfd') ?></td></tr></thead>
 		<?php
         foreach ($files as $file){
 			if ($file === '.' || $file === '..'){
@@ -143,13 +142,13 @@ class YDFD_Actions {
 			} else { ?>
             <tr>
 				<td>
-					<a href="<?php echo $this->dir_url . '/' . urlencode( $file ) ?>" title="click to download" download><?php echo $file ?></a>
+					<a href="<?php echo $this->dir_url . '/' . urlencode( $file ) ?>" title="<?php _e('Click to download', 'ydfd')?>" download><?php echo $file ?></a>
 				</td>
 				<td>
                     <form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post">
                         <input type="hidden" name="filename" value="<?php echo $file ?>" >
                         <input type="hidden" name="action" value="delete_file" >
-                        <input type="submit" class="link delete" value="Delete">
+                        <input type="submit" class="link delete" value="<?php _e('Delete', 'ydfd') ?>">
                     </form>
 				</td>
             </tr>
@@ -159,7 +158,7 @@ class YDFD_Actions {
 		<form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post">
             <input type="hidden" name="filename" value="all" >
             <input type="hidden" name="action" value="delete_file" >
-            <input type="submit" class="button button-primary" value="Очистить рабочую паку">
+            <input type="submit" class="button button-primary" value="<?php _e('Clear working Folder', 'ydfd') ?>">
         </form>
 		<?php
 	}
@@ -173,14 +172,14 @@ class YDFD_Actions {
 					unlink( $this->dirpath . '/' . $file );
 				}
 			}
-			$message = "Work folder is clear!";
+			$message = __('Work folder is clear!', 'ydfd');
 			$_SESSION['YDFD'] = "<div class='notice notice-success is-dismissible'><p>{$message}</p></div>";
 			$this->redirect();
 		} else {
 			$file_path = $this->dirpath . '/' . $filename;
 			if ( file_exists( $file_path ) ) {
 				unlink( $file_path );
-				$message = "File <strong>{$filename}</strong> is delete!";
+				$message = __('File ', 'ydfd') ."<strong>{$filename}</strong>" . __('is delete!', 'ydfd');
 				$_SESSION['YDFD'] = "<div class='notice notice-success is-dismissible'><p>{$message}</p></div>";
 				$this->redirect();
 			} else {

@@ -1,0 +1,180 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Yandex Disk file downloader\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-05-19 00:03+0000\n"
+"PO-Revision-Date: 2020-05-19 00:05+0000\n"
+"Last-Translator: \n"
+"Language-Team: Русский\n"
+"Language: ru_RU\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
+"n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.3.4; wp-5.4.1"
+
+#: classes/class-ydfd-actions.php:137 classes/class-ydfd-output.php:22
+msgid "Actions"
+msgstr "Действия"
+
+#: classes/class-ydfd-settings.php:54
+msgid "Basic settings"
+msgstr "Основные настройки"
+
+#: classes/class-ydfd-actions.php:161
+msgid "Clear working Folder"
+msgstr ""
+
+#: classes/class-ydfd-actions.php:145
+msgid "Click to download"
+msgstr ""
+
+#: classes/class-ydfd-output.php:67
+msgid "Create CRON Task"
+msgstr ""
+
+#: classes/class-ydfd-actions.php:110
+msgid "Cron job successfully added in WP-Cron!"
+msgstr ""
+
+#: classes/class-ydfd-actions.php:122
+msgid "Cron job successfully deleted!"
+msgstr ""
+
+#: classes/class-ydfd-output.php:62
+msgid "Date"
+msgstr "Дата"
+
+#: classes/class-ydfd-actions.php:151
+msgid "Delete"
+msgstr "Удалить"
+
+#: classes/class-ydfd-output.php:56
+msgid "Delete CRON Task"
+msgstr ""
+
+#: classes/class-ydfd-actions.php:60
+msgid "Download File"
+msgstr "Скачать файл"
+
+#: classes/class-ydfd-settings.php:58
+msgid "Email to send reports"
+msgstr ""
+
+#: classes/class-ydfd-actions.php:71
+msgid "Failed to download file from Yandex Disk"
+msgstr ""
+
+#: classes/class-ydfd-actions.php:65
+msgid "Failed to write file to folder Uploads/ya-disk-files/"
+msgstr ""
+
+#: classes/class-ydfd-actions.php:182
+msgid "File "
+msgstr ""
+
+#: classes/class-ydfd-output.php:53
+msgid "File Download Scheduled "
+msgstr ""
+
+#: classes/class-ydfd-actions.php:137
+msgid "File Name"
+msgstr ""
+
+#: classes/class-ydfd-actions.php:60
+msgid "File successfully received "
+msgstr ""
+
+#: classes/class-ydfd-actions.php:135
+msgid "Files in your Server"
+msgstr ""
+
+#: classes/class-ydfd-actions.php:54
+msgid ""
+"Folder <strong>wp-content/uploads/ya-disk-files/</strong> does not exist"
+msgstr ""
+
+#: classes/class-ydfd-output.php:42 classes/class-ydfd-output.php:46
+msgid "Get File"
+msgstr "Получить файл"
+
+#. Author URI of the plugin
+msgid "https://twitter.com/NVitkovsky"
+msgstr ""
+
+#: classes/class-ydfd-settings.php:68
+msgid "If you need to get the file once, you can do it on the tab \"Actions\""
+msgstr ""
+
+#: classes/class-ydfd-settings.php:77
+msgid ""
+"If you want to receive notifications by e-mail about the file download "
+"status - enter your e-mail here"
+msgstr ""
+
+#: classes/class-ydfd-actions.php:182
+msgid "is delete!"
+msgstr ""
+
+#: classes/class-ydfd-output.php:47
+msgid ""
+"Leave this field blank to receive the file from the link from the settings."
+msgstr ""
+
+#: classes/class-ydfd-actions.php:80
+msgid "Link to download file not received. The API did not return the link."
+msgstr ""
+
+#: classes/class-ydfd-settings.php:57
+msgid "Link to Ya.Disk"
+msgstr ""
+
+#: classes/class-ydfd-output.php:21
+msgid "Options"
+msgstr "Настройки"
+
+#: classes/class-ydfd-output.php:59
+msgid "Set task execution time:"
+msgstr ""
+
+#: classes/class-ydfd-output.php:51
+msgid "Task in WP-CRON"
+msgstr ""
+
+#: classes/class-ydfd-settings.php:67
+msgid ""
+"The public URL of the file on Ya.Disk for regular receipt of the file. This "
+"file can be downloaded on assignment in WP-Crone."
+msgstr ""
+
+#: classes/class-ydfd-output.php:60
+msgid ""
+"The task will be performed daily at the time set below starting from the set "
+"date."
+msgstr ""
+
+#: classes/class-ydfd-settings.php:78
+msgid "This can be useful when uploading a file through a task in WP-Crone."
+msgstr ""
+
+#: classes/class-ydfd-output.php:64
+msgid "Time"
+msgstr ""
+
+#. Author of the plugin
+msgid "Undizzy"
+msgstr ""
+
+#: classes/class-ydfd-actions.php:175
+msgid "Work folder is clear!"
+msgstr ""
+
+#. Name of the plugin
+msgid "Yandex Disk file downloader"
+msgstr ""
+
+#. Description of the plugin
+msgid "Скачивает файлы с Яндекс.Диска по публичной ссылке."
+msgstr ""

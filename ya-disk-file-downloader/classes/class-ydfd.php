@@ -18,6 +18,7 @@ class YDFD {
 
 		add_action('admin_menu', array($admin_settings, 'YAFD_admin_menu') );
 		add_action('admin_init', array($admin_settings, 'YDFD_register_settings') );
+		add_action( 'plugins_loaded', array($admin_settings, 'plugin_lang') );
 
 		add_action('admin_post_get_file', array($admin_actions, 'YDFD_get_file'));
 		add_action('admin_post_delete_file', array($admin_actions, 'delete_file'));

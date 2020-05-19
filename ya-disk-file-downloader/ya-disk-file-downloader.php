@@ -7,6 +7,7 @@ Author: Undizzy
 Author URI: https://twitter.com/NVitkovsky
 Short Name: YDFD_
 Text Domain: ydfd
+Domain Path: /languages
 */
 defined( 'ABSPATH' ) || exit;
 

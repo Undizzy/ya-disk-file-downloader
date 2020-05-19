@@ -30,8 +30,8 @@ class YDFD_Settings {
 	private $plugin_icon_url = 'dashicons-download';
 
 	public function __construct() {
-
 	}
+
 	/**
 	 * Добавляет страницы опций и получения файла админ.меню
 	 */
@@ -51,11 +51,11 @@ class YDFD_Settings {
 		register_setting( 'option_group', 'option_name' );
 
 		// параметры: $id, $title, $callback, $page
-		add_settings_section( 'section_id', 'Основные настройки', '', 'YDFD_page' );
+		add_settings_section( 'section_id', __('Basic settings', 'ydfd'), '', 'YDFD_page' );
 
 		// параметры: $id, $title, $callback, $page, $section, $args
-		add_settings_field('YDFD_disc_url', 'Ссылка на Я.Диск', array($this, 'YDFD_disc_url'), 'YDFD_page', 'section_id' );
-		add_settings_field('YDFD_send_email', 'Email для отправки отчётов', array($this, 'YDFD_send_email_callback'), 'YDFD_page', 'section_id' );
+		add_settings_field('YDFD_disc_url', __('Link to Ya.Disk', 'ydfd'), array($this, 'YDFD_disc_url'), 'YDFD_page', 'section_id' );
+		add_settings_field('YDFD_send_email', __('Email to send reports', 'ydfd'), array($this, 'YDFD_send_email_callback'), 'YDFD_page', 'section_id' );
 	}
 
 	## Заполняем опцию 1
@@ -64,8 +64,8 @@ class YDFD_Settings {
 		$val = $val ? $val['input'] : null;
 		?>
 		<input id="ya-disc-url" type="text" name="option_name[input]" value="<?php echo esc_attr( $val ) ?>" size="50"/>
-        <p><label for="ya-disc-url">Публичный URL файла на Я.Диске для регулярного получения файла. Этот файл может скачиваться по заданию в WP-Crone.</label></p>
-        <p><code><i>Если вам необходипо получить файл один раз, это можно сделать на вкладке "Действия"</i></code></p>
+        <p><label for="ya-disc-url"><?php _e('The public URL of the file on Ya.Disk for regular receipt of the file. This file can be downloaded on assignment in WP-Crone.', 'ydfd') ?></label></p>
+        <p><code><i><?php _e('If you need to get the file once, you can do it on the tab "Actions"', 'ydfd') ?></i></code></p>
 		<?php
 	}
 	## Заполняем опцию 2
@@ -74,11 +74,14 @@ class YDFD_Settings {
 		$val = $val ? $val['email'] : null;
 		?>
 		<input id="ya-disc-email" type="text" name="option_name[email]" value="<?php echo esc_attr( $val ) ?>" size="50"/>
-        <p><label for="ya-disc-email">Если вы хотите получать уведомления на почту о статусе скачивания файла - введите сюда свой e-mail</label></p>
-        <p><code><i>Это может быть полезно при запранированной загрузке файла через задачу в WP-Crone</i></code></p>
+        <p><label for="ya-disc-email"><?php _e('If you want to receive notifications by e-mail about the file download status - enter your e-mail here', 'ydfd') ?></label></p>
+        <p><code><i><?php _e('This can be useful when uploading a file through a task in WP-Crone.', 'ydfd'); ?></i></code></p>
 		<?php
 	}
 
+    public function plugin_lang() {
+	    load_plugin_textdomain( 'ydfd', false, dirname( plugin_basename(YDFD_FILE) ) . '/languages' );
+    }
 
 
 
